@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Upcycled Bakery — 제로웨이스트 베이커리 플랫폼</title>
+<style>
+  /* 기본 레이아웃: 블로그 스타일, 섹션 풀스크린 느낌 */
+  :root{--maxw:1100px;--accent:#b35d2f;--muted:#666;}
+  *{box-sizing:border-box}
+  body{font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", sans-serif; margin:0; color:#222; line-height:1.45;}
+  header{background:linear-gradient(180deg,#fff 0%, #fff0 50%); padding:24px 16px; position:sticky; top:0; z-index:10; border-bottom:1px solid #eee;}
+  .container{max-width:var(--maxw); margin:0 auto; padding:24px;}
+  h1{margin:0; font-size:1.6rem; color:var(--accent)}
+  nav{margin-top:12px; display:flex; gap:10px; flex-wrap:wrap}
+  nav a{color:#444; text-decoration:none; padding:8px 12px; border-radius:8px}
+  nav a:hover{background:#faf0ea}
+  section{padding:48px 16px; border-bottom:1px solid #f0f0f0;}
+  .hero{display:flex; gap:24px; align-items:center; justify-content:space-between; flex-wrap:wrap}
+  .hero .lead{flex:1 1 420px}
+  .hero img{width:320px; max-width:40%; border-radius:12px; object-fit:cover}
+  .card{background:#fff; padding:18px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.04); margin-bottom:12px}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px;}
+  .muted{color:var(--muted); font-size:0.95rem}
+  .btn{background:var(--accent); color:#fff; padding:10px 14px; border:none; border-radius:8px; cursor:pointer}
+  .btn[disabled]{opacity:0.6; cursor:not-allowed}
+  form input, form textarea, .small-input{width:100%; padding:10px; margin-top:8px; border-radius:8px; border:1px solid #e6e6e6}
+  .small{font-size:0.9rem}
+  footer{padding:20px; text-align:center; color:#666}
+  .list{list-style:none; padding:0; margin:0}
+  .list li{padding:10px 0; border-bottom:1px dashed #eee}
+  .stat{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+  .stat .item{background:#faf7f5; padding:12px; border-radius:8px}
+  @media (max-width:800px){
+    .hero img{max-width:100%; width:100%}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container" style="display:flex; align-items:center; justify-content:space-between;">
+    <div>
+      <h1>Upcycled Bakery</h1>
+      <div class="muted">제과·제빵 관점의 제로웨이스트 솔루션</div>
+    </div>
+    <nav>
+      <a href="#about">소개</a>
+      <a href="#recipes">레시피</a>
+      <a href="#donate">재료기부</a>
+      <a href="#impact">임팩트</a>
+      <a href="#simulate">모의창업</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section id="about">
+    <div class="container hero">
+      <div class="lead card">
+        <h2>문제와 기회</h2>
+        <p class="muted">베이커리에서 버려지는 반제품, 외형미달 과일, 남은 빵 등은 환경적·경제적 손실을 초래합니다. 이 플랫폼은 그러한 자원을 모아 수익성 있는 업사이클 제품으로 바꾸고, 지역과 소비자를 연결합니다.</p>
+        <div style="margin-top:12px">
+          <button class="btn" onclick="document.getElementById('recipes').scrollIntoView({behavior:'smooth'})">레시피 보기</button>
+          <button class="btn" style="background:#4b8f5a; margin-left:8px" onclick="document.getElementById('donate').scrollIntoView({behavior:'smooth'})">재료 기부하기</button>
+        </div>
+      </div>
+      <img src="data:image/svg+xml;utf8,
+        <svg xmlns='http://www.w3.org/2000/svg' width='800' height='500'>
+        <rect width='100%' height='100%' fill='%23fdf6f2'/>
+        <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='28' fill='%23b35d2f'>Upcycled Bakery</text>
+        </svg>" alt="Upcycled Bakery image">
+    </div>
+  </section>
+
+  <section id="recipes">
+    <div class="container">
+      <h2>업사이클 레시피 갤러리</h2>
+      <p class="muted">사용자 업로드 레시피를 공유하고, 재료·난이도·예상 폐기물 절감량을 적어주세요.</p>
+
+      <div style="margin-top:16px" class="grid">
+        <div class="card">
+          <h3>레시피 업로드</h3>
+          <form id="recipeForm">
+            <label class="small">레시피 이름</label>
+            <input id="r_name" required placeholder="예: 외형불량 사과 파운드">
+            <label class="small">재료(간단히)</label>
+            <input id="r_ingredients" required placeholder="예: 사과 500g, 설탕 80g, 버터...">
+            <label class="small">설명/방법</label>
+            <textarea id="r_steps" rows="4" required placeholder="만드는 방법을 적어주세요."></textarea>
+            <label class="small">이 레시피로 '업사이클'하는 재료 무게(그램)</label>
+            <input id="r_waste" type="number" min="0" placeholder="예: 400">
+            <div style="margin-top:10px; display:flex; gap:8px;">
+              <button class="btn" type="submit">업로드</button>
+              <button type="button" onclick="clearRecipeForm()" style="background:#888" class="btn">지우기</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <h3>레시피 목록</h3>
+          <ul id="recipeList" class="list"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="donate">
+    <div class="container">
+      <h2>재료 기부 / 재료 찾기</h2>
+      <p class="muted">농가, 가게, 개인이 남는 재료를 올리거나 필요한 사람을 찾을 수 있습니다.</p>
+
+      <div class="grid" style="margin-top:16px">
+        <div class="card">
+          <h3>기부 등록</h3>
+          <form id="donateForm">
+            <label>제공자 이름/단체</label>
+            <input id="d_name" placeholder="예: OO농장">
+            <label>지역(시/군/구)</label>
+            <input id="d_region" placeholder="예: 서울 강남구">
+            <label>재료와 무게(예: 외형미달 사과 30kg)</label>
+            <input id="d_item" placeholder="예: 외형미달 사과 30kg">
+            <div style="margin-top:8px">
+              <button class="btn">등록하기</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card">
+          <h3>기부 목록</h3>
+          <ul id="donateList" class="list"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="impact">
+    <div class="container">
+      <h2>임팩트 계산기 & 통계</h2>
+      <p class="muted">업사이클한 재료 무게를 입력하면 예상 절감 CO₂(간단 추정)를 보여줍니다.</p>
+
+      <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:16px;">
+        <div class="card" style="flex:1; min-width:260px;">
+          <h3>임팩트 계산기</h3>
+          <label>업사이클한 재료 무게(그램)</label>
+          <input id="impactWeight" type="number" placeholder="예: 500">
+          <div style="margin-top:10px">
+            <button class="btn" onclick="calcImpact()">계산</button>
+          </div>
+          <div id="impactResult" style="margin-top:12px" class="muted"></div>
+        </div>
+
+        <div class="card" style="flex:1; min-width:260px;">
+          <h3>누적 통계 (로컬)</h3>
+          <div class="stat" id="statsArea">
+            <!-- 동적으로 채워짐 -->
+          </div>
+          <div style="margin-top:8px">
+            <button class="btn" onclick="resetData()" style="background:#c94a4a">데이터 초기화</button>
+          </div>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:12px">계산 가정: 음식물 폐기물 1kg 당 평균 2.5kg CO₂eq 배출(간단 추정치). 실제값은 재료·공정에 따라 다름.</p>
+    </div>
+  </section>
+
+  <section id="simulate">
+    <div class="container">
+      <h2>모의 창업 시뮬레이터 (간단)</h2>
+      <p class="muted">가격과 생산량을 넣어 간단한 매출/비용/예상순이익을 계산합니다.</p>
+
+      <div class="grid" style="margin-top:16px">
+        <div class="card">
+          <h3>입력</h3>
+          <label>제품 단가(원)</label>
+          <input id="p_price" type="number" placeholder="예: 7000">
+          <label>예상 하루 판매량(개)</label>
+          <input id="p_qty" type="number" placeholder="예: 20">
+          <label>제품당 원가(재료+포장, 원)</label>
+          <input id="p_cost" type="number" placeholder="예: 2000">
+          <label>기타 고정비(월, 원)</label>
+          <input id="p_fixed" type="number" placeholder="예: 300000">
+          <div style="margin-top:10px">
+            <button class="btn" onclick="simulateBiz()">시뮬레이트</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>결과</h3>
+          <div id="simResult" class="muted">결과가 여기 표시됩니다.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="join">
+    <div class="container">
+      <h2>참여하기 / 워크숍 신청</h2>
+      <p class="muted">학생·개인·농가 누구나 참여 가능. 지역 파트너를 찾습니다.</p>
+      <div class="card">
+        <form id="joinForm">
+          <label>이름</label>
+          <input id="j_name" placeholder="이름">
+          <label>연락처(또는 이메일)</label>
+          <input id="j_contact" placeholder="010-xxxx-xxxx or email">
+          <label>메시지</label>
+          <textarea id="j_msg" rows="3" placeholder="참여 이유나 가능한 역할을 적어주세요."></textarea>
+          <div style="margin-top:10px"><button class="btn">신청</button></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container muted">© Upcycled Bakery — 교육용/프로토타입. 실제 사업으로 확장 시 지역 규정 및 식품안전 규정을 반드시 준수하세요.</div>
+</footer>
+
+<script>
+/* 간단 로컬 데이터 모델: 로컬스토리지에 recipes, donations, impactStats 저장 */
+function loadData(key){ try { return JSON.parse(localStorage.getItem(key) || '[]') } catch(e){ return [] } }
+function saveData(key, data){ localStorage.setItem(key, JSON.stringify(data)) }
+
+/* 레시피 관련 */
+const recipeForm = document.getElementById('recipeForm')
+const recipeList = document.getElementById('recipeList')
+
+function renderRecipes(){
+  const arr = loadData('recipes')
+  recipeList.innerHTML = arr.length ? arr.map((r,i)=> 
+    `<li>
+      <strong>${escapeHtml(r.name)}</strong> <span class="muted">(${escapeHtml(r.ingredients)})</span>
+      <div style="margin-top:6px">${escapeHtml(r.steps)}</div>
+      <div class="muted" style="margin-top:6px">업사이클 무게: ${r.waste || 0} g</div>
+      <div style="margin-top:6px"><button class="btn" onclick="useRecipe(${i})">이 레시피 사용</button> <button style="background:#888" class="btn" onclick="deleteRecipe(${i})">삭제</button></div>
+    </li>`
+  ).join('') : '<li class="muted">등록된 레시피가 없습니다.</li>'
+}
+
+function escapeHtml(s){ if(!s) return ''; return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;') }
+
+recipeForm.addEventListener('submit', (e)=>{
+  e.preventDefault()
+  const name = document.getElementById('r_name').value.trim()
+  const ing = document.getElementById('r_ingredients').value.trim()
+  const steps = document.getElementById('r_steps').value.trim()
+  const waste = Number(document.getElementById('r_waste').value) || 0
+  const arr = loadData('recipes')
+  arr.unshift({name, ingredients:ing, steps, waste, created:Date.now()})
+  saveData('recipes', arr)
+  recipeForm.reset()
+  renderRecipes()
+  addImpactRecord(waste)
+})
+
+function clearRecipeForm(){ recipeForm.reset() }
+function deleteRecipe(i){
+  const arr = loadData('recipes'); arr.splice(i,1); saveData('recipes',arr); renderRecipes()
+}
+function useRecipe(i){
+  const arr = loadData('recipes'); const r = arr[i]
+  if(!r) return alert('레시피를 찾을 수 없습니다.')
+  const amount = prompt('이 레시피로 업사이클할 예상 재료 무게(그램)를 입력하세요', r.waste || 0)
+  const parsed = Number(amount) || 0
+  addImpactRecord(parsed)
+  alert('임팩트가 기록되었습니다.')
+}
+
+/* 기부 관련 */
+const donateForm = document.getElementById('donateForm')
+const donateList = document.getElementById('donateList')
+donateForm.addEventListener('submit', e=>{
+  e.preventDefault()
+  const name = document.getElementById('d_name').value.trim() || '익명'
+  const region = document.getElementById('d_region').value.trim()
+  const item = document.getElementById('d_item').value.trim()
+  const arr = loadData('donations')
+  arr.unshift({name, region, item, created:Date.now()})
+  saveData('donations', arr)
+  donateForm.reset()
+  renderDonations()
+})
+function renderDonations(){
+  const arr = loadData('donations')
+  donateList.innerHTML = arr.length ? arr.map(d=>`<li><strong>${escapeHtml(d.name)}</strong> <div class="muted">${escapeHtml(d.region)} — ${escapeHtml(d.item)}</div></li>`).join('') : '<li class="muted">등록된 재료가 없습니다.</li>'
+}
+
+/* 임팩트 계산기 및 통계 */
+function calcImpact(){
+  const w = Number(document.getElementById('impactWeight').value)
+  if(!w){ alert('무게(그램)를 입력하세요.'); return }
+  // 가정: 음식물 폐기물 1kg 당 2.5kg CO2eq (간단 추정)
+  const co2_per_kg = 2.5
+  const co2 = (w/1000) * co2_per_kg
+  document.getElementById('impactResult').innerHTML = `<strong>${w} g</strong> 업사이클 → 예상 CO₂ 절감 약 <strong>${co2.toFixed(2)} kg CO₂eq</strong>`
+  addImpactRecord(w)
+}
+
+function addImpactRecord(w){
+  if(!w || w<=0) return
+  const stats = loadData('impactStats')
+  stats.unshift({w, t:Date.now()})
+  saveData('impactStats', stats)
+  renderStats()
+}
+
+function renderStats(){
+  const stats = loadData('impactStats')
+  const totalG = stats.reduce((s, it)=> s + (Number(it.w)||0), 0)
+  const co2 = (totalG/1000) * 2.5
+  const recipesCount = loadData('recipes').length
+  const donationsCount = loadData('donations').length
+  document.getElementById('statsArea').innerHTML = `
+    <div class="item"><strong>총 업사이클 재료</strong><div class="muted">${totalG} g</div></div>
+    <div class="item"><strong>추정 CO₂ 절감</strong><div class="muted">${co2.toFixed(2)} kg</div></div>
+    <div class="item"><strong>레시피 수</strong><div class="muted">${recipesCount}</div></div>
+    <div class="item"><strong>등록 재료 수</strong><div class="muted">${donationsCount}</div></div>
+  `
+}
+
+/* 모의창업 시뮬레이터 */
+function simulateBiz(){
+  const price = Number(document.getElementById('p_price').value) || 0
+  const qty = Number(document.getElementById('p_qty').value) || 0
+  const cost = Number(document.getElementById('p_cost').value) || 0
+  const fixed = Number(document.getElementById('p_fixed').value) || 0
+  const monthlyRevenue = price * qty * 30
+  const monthlyVarCost = cost * qty * 30
+  const monthlyProfit = monthlyRevenue - monthlyVarCost - fixed
+  const result = `
+    월 매출: ${monthlyRevenue.toLocaleString()} 원<br>
+    월 변동비(재료 등): ${monthlyVarCost.toLocaleString()} 원<br>
+    월 고정비: ${fixed.toLocaleString()} 원<br>
+    → 예상 월 순이익: <strong>${monthlyProfit.toLocaleString()} 원</strong>
+  `
+  document.getElementById('simResult').innerHTML = result
+}
+
+/* 참여 폼 간단 처리 */
+document.getElementById('joinForm').addEventListener('submit', e=>{
+  e.preventDefault()
+  const name = document.getElementById('j_name').value || '익명'
+  const contact = document.getElementById('j_contact').value || ''
+  const msg = document.getElementById('j_msg').value || ''
+  const arr = loadData('joins')
+  arr.unshift({name, contact, msg, t:Date.now()})
+  saveData('joins', arr)
+  e.target.reset()
+  alert('신청이 접수되었습니다. (로컬 저장 — 프로토타입)')
+})
+
+/* 데이터 초기화 */
+function resetData(){
+  if(!confirm('로컬에 저장된 모든 플랫폼 데이터를 초기화하시겠습니까?')) return
+  localStorage.removeItem('recipes')
+  localStorage.removeItem('donations')
+  localStorage.removeItem('impactStats')
+  localStorage.removeItem('joins')
+  renderRecipes(); renderDonations(); renderStats()
+  alert('초기화 완료')
+}
+
+/* 초기 로드 */
+renderRecipes(); renderDonations(); renderStats()
+
+// 작은 도움 함수: 날짜 포맷 등 (필요하면 확장)
+</script>
+
+</body>
+</html>
